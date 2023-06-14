@@ -1,0 +1,185 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+
+body {
+    background: rgb(32, 73, 167);
+    background: linear-gradient(160deg, rgb(47, 86, 177) 0%, rgb(150, 46, 48) 100%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    color: rgb(255, 255, 255);
+    font-family: "Inter", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    font-size: 56px;
+    margin-bottom: 0;
+}
+
+.content__input--form {
+    display: flex;
+    flex-direction: column;
+}
+
+.content__input--form>label>input {
+    box-sizing: border-box;
+    font-family: "Inter";
+    width: 320px;
+    height: 45px;
+    margin-bottom: 35px;
+    padding-left: 25px;
+    border: none;
+    border-radius: 12px;
+    background-color: rgba(207, 207, 207, 0.4);
+    color: rgb(255, 255, 255);
+    outline: none;
+}
+
+.content__input--form>label>input::placeholder {
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+}
+
+.content__submit>.button {
+    height: 45px;
+    width: 320px;
+    border: none;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    font-family: "Inter";
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.content__submit>.button2 {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.content__submit>.button2:hover {
+    background-color: #45a049;
+}
+
+.content__submit>.button2:active {
+    background-color: #39843a;
+}
+
+.content__submit>.google-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #3170dd;
+    color: rgb(255, 255, 255);
+    overflow: hidden;
+}
+
+.google-button__google-icon {
+    background-color: rgb(255, 255, 255);
+    background-image: url("https://img.icons8.com/color/50/000000/google-logo.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 35px;
+    height: 100%;
+    width: 20%;
+    margin-right: 30px;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+}
+
+.google-button__google-icon:hover {
+    background-color: #000000;
+}
+
+.google-button__google-icon:active {
+    background-color: #ffffff;
+}
+
+
+.content__submit--line {
+    width: 70%;
+    height: 1.5px;
+    background-color: rgb(255, 255, 255);
+}
+
+.content__submit>p,
+.content__footer p {
+    font-weight: 200;
+}
+
+.content__footer p {
+    font-size: 13px;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+@media screen and (max-width: 800px) {
+    .main-container {
+        margin: 1px 20px;
+    }
+
+    .content__input--form {
+        margin-top: 80px;
+        align-items: center;
+    }
+
+    .content__submit {
+        margin-top: 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .content__footer {
+        margin-top: 100px;
+    }
+}
+
+@media screen and (min-width: 801px) {
+
+    .main-container__content {
+        margin-top: 5%;
+        box-sizing: border-box;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        width: 90%;
+        height: 400px;
+        padding: 5%;
+    }
+
+    .content__inputs {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50%;
+        height: 100%;
+        transform: translate(0, 5%);
+    }
+
+    .content__submit {
+        width: 50%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-left: 1px solid white;
+    }
+
+    .content__footer {
+        width: 90%;
+    }
+}
