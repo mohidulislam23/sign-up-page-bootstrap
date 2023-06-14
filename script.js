@@ -1,42 +1,29 @@
-// script.js
-
-document.addEventListener("DOMContentLoaded", function() {
-    const form = document.querySelector(".content__input--form");
-    const submitButton = form.querySelector("button[type='submit']");
-    const googleButton = document.querySelector(".content__submit button");
-    const successAlert = document.querySelector(".alert-success");
+$(document).ready(function() {
+  $("button[type='submit']").click(function(e) {
+    e.preventDefault();
     
-    form.addEventListener("submit", function(event) {
-      event.preventDefault();
-      
-      // Show the spinner in the submit button
-      submitButton.querySelector(".spinner-border").classList.remove("d-none");
-      
-      // Simulate form submission delay (for demonstration purposes)
-      setTimeout(function() {
-        // Hide the spinner in the submit button
-        submitButton.querySelector(".spinner-border").classList.add("d-none");
-        
-        // Show the success alert
-        successAlert.classList.remove("d-none");
-        
-        // Reset the form
-        form.reset();
-      }, 2000);
-    });
+    var firstName = $("#First-name").val();
+    var lastName = $("#Last-name").val();
+    var email = $("#email").val();
+    var password = $("#password").val();
     
-    googleButton.addEventListener("click", function() {
-      // Show the spinner in the Google button
-      googleButton.querySelector(".spinner-border").classList.remove("d-none");
-      
-      // Simulate button click delay (for demonstration purposes)
-      setTimeout(function() {
-        // Hide the spinner in the Google button
-        googleButton.querySelector(".spinner-border").classList.add("d-none");
-        
-        // Show the success alert
-        successAlert.classList.remove("d-none");
-      }, 1500);
-    });
+    if (firstName === "" || lastName === "" || email === "" || password === "") {
+      var errorMessage = "Please fill in all fields.";
+      $(".alert").addClass("alert-danger").removeClass("d-none").html(errorMessage);
+    } else {
+      var successMessage = "Sign up successful!";
+      $(".alert").addClass("alert-success").removeClass("d-none").html(successMessage + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
+      $(".content__input--form")[0].reset(); // Reset the form
+      $(".clear-button").removeClass("d-none"); // Show the clear button
+    }
   });
   
+  $(".alert").on("closed.bs.alert", function() {
+    $(this).addClass("d-none");
+  });
+  
+  $(".clear-button").click(function() {
+    $(".content__input--form")[0].reset(); // Reset the form
+    $(this).addClass("d-none"); // Hide the clear button
+  });
+});
