@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Movie Table</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .container {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Movie Information</h1>
+    <input type="text" id="searchInput" placeholder="Search Title" class="form-control mb-3">
+    <table id="movieTable" class="table table-striped">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)">Title</th>
+          <th onclick="sortTable(1)">Year</th>
+          <th onclick="sortTable(2)">IMDb Rating</th>
+          <th onclick="sortTable(3)">Genre</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    function fetchData(title) {
+      const apiKey = 'b6ca6d2a9f5566a9e96a1d12bfe07f5a';
+      const apiUrl = `http://www.omdbapi.com/?s=${encodeURIComponent(title)}&apikey=${apiKey}`;
+
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          const movieTable = document.getElementById('movieTable');
+          const tbody = movieTable.getElementsByTagName('tbody')[0];
+
+          tbody.innerHTML = '';
+
+          if (data.Response === 'False') {
+            const row = tbody.insertRow();
+            const cell = row.insertCell();
+            cell.colSpan = 4;
+            cell.innerText = 'No movies found.';
+          } else {
+            data.Search.forEach(movie => {
+              const row = tbody.insertRow();
+              row.insertCell().innerText = movie.Title;
+              row.insertCell().innerText = movie.Year;
+              row.insertCell().innerText = movie.imdbRating;
+              row.insertCell().innerText = movie.Genre;
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+
+    function sortTable(columnIndex) {
+      const table = document.getElementById('movieTable');
+      const tbody = table.getElementsByTagName('tbody')[0];
+      const rows = Array.from(tbody.getElementsByTagName('tr'));
+
+      rows.sort((a, b) => {
+        const valueA = a.getElementsByTagName('td')[columnIndex].innerText;
+        const valueB = b.getElementsByTagName('td')[columnIndex].innerText;
+        return valueA.localeCompare(valueB, undefined, { numeric: true });
+      });
+
+      while (tbody.firstChild) {
+        tbody.removeChild(tbody.firstChild);
+      }
+
+      rows.forEach(row => {
+        tbody.appendChild(row);
+      });
+    }
+
+    function filterTable() {
+      const input = document.getElementById('searchInput');
+      const filter = input.value.toUpperCase();
+      const table = document.getElementById('movieTable');
+      const tbody = table.getElementsByTagName('tbody')[0];
+      const rows = Array.from(tbody.getElementsByTagName('tr'));
+
+      rows.forEach(row => {
+        const title = row.getElementsByTagName('td')[0].innerText.toUpperCase();
+        row.style.display = title.includes(filter) ? '' : 'none';
+      });
+    }
+
+    document.getElementById('searchInput').addEventListener('input', filterTable);
+    fetchData('Star Wars');
+    fetchData('Avengers');
+    fetchData('Jurassic Park');
+  </script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Table</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container {
+            margin: 30px;
+        }
+    </style>
+</head>
+
+
+<body>
+    <div class="container">
+        <h1>University Information</h1>
+        <input type="text" id="searchInput" placeholder="Search Title" class="form-control mb-4">
+        <table id="UniversityTable" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Country</th>
+                    <th>Alpha Code</th>
+                    <th>University</th>
+                    <th>State</th>
+                    <th>Domain</th>
+                    <th>Website</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <script>
+        const apiUrl = 'http://universities.hipolabs.com/search?country=United+States';
+
+        function fetchData() {
+            fetch(apiUrl)
+                .then(responce => responce.json())
+                .then(data => {
+                    const UniversityTable = document.getElementById('UniversityTable');
+                    const tbody = UniversityTable.getElementsByTagName('tbody')[0];
+                    tbody.innerHTML = '';  //optional
+
+                    data.forEach(university => {
+                        const country = university.country;
+                        const ac = university.alpha_two_code;
+                        const name = university.name;
+                        const state = university.state_province || 'N/A';
+                        const domain = university.domains[0];
+                        const website = university.web_pages[0] || 'N/A';
+
+                        const row = tbody.insertRow();
+                        row.insertCell().innerText = country;
+                        row.insertCell().innerText = ac;
+                        row.insertCell().innerText = name;
+                        row.insertCell().innerText = state;
+                        row.insertCell().innerText = domain;
+                        row.insertCell().innerHTML = `<a href="${website}" target="_blank">${website}<a/>`;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error: ', error);
+                })
+        }
+
+        fetchData();
+    </script>
+
+</body>
+
+</html>
