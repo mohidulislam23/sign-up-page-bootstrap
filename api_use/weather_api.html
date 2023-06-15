@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Weather Table</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .container {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Weather Information</h1>
+    <input type="text" id="searchInput" placeholder="Search City" class="form-control mb-3">
+    <table id="weatherTable" class="table table-striped">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)">City</th>
+          <th onclick="sortTable(1)">Temperature (°C)</th>
+          <th onclick="sortTable(2)">Humidity (%)</th>
+          <th onclick="sortTable(3)">Description</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    const apiKey = 'b6ca6d2a9f5566a9e96a1d12bfe07f5a';
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q={city}&appid=${apiKey}&units=metric`;
+
+    function fetchData(city) {
+      const url = apiUrl.replace('{city}', city);
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          const weatherTable = document.getElementById('weatherTable');
+          const tbody = weatherTable.getElementsByTagName('tbody')[0];
+
+          const city = data.name;
+          const temperature = data.main.temp;
+          const humidity = data.main.humidity;
+          const description = data.weather[0].description;
+
+          const row = tbody.insertRow();
+          row.insertCell().innerText = city;
+          row.insertCell().innerText = temperature;
+          row.insertCell().innerText = humidity;
+          row.insertCell().innerText = description;
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+
+    function sortTable(columnIndex) {
+      const table = document.getElementById('weatherTable');
+      const tbody = table.getElementsByTagName('tbody')[0];
+      const rows = Array.from(tbody.getElementsByTagName('tr'));
+
+      rows.sort((a, b) => {
+        const valueA = a.getElementsByTagName('td')[columnIndex].innerText;
+        const valueB = b.getElementsByTagName('td')[columnIndex].innerText;
+        return valueA.localeCompare(valueB, undefined, { numeric: true });
+      });
+
+      while (tbody.firstChild) {
+        tbody.removeChild(tbody.firstChild);
+      }
+
+      rows.forEach(row => {
+        tbody.appendChild(row);
+      });
+    }
+
+    function filterTable() {
+      const input = document.getElementById('searchInput');
+      const filter = input.value.toUpperCase();
+      const table = document.getElementById('weatherTable');
+      const tbody = table.getElementsByTagName('tbody')[0];
+      const rows = Array.from(tbody.getElementsByTagName('tr'));
+
+      rows.forEach(row => {
+        const city = row.getElementsByTagName('td')[0].innerText.toUpperCase();
+        row.style.display = city.includes(filter) ? '' : 'none';
+      });
+    }
+
+    document.getElementById('searchInput').addEventListener('input', filterTable);
+    fetchData('London');
+    fetchData('New York');
+    fetchData('Tokyo');
+  </script>
+</body>
+</html>
+
+
+<!-- Create a Web Page and show API data in a table with below features:
+
+Use of JavaScript fetch()
+
+Use bootstrap table
+
+Implement sort and filtering features in table. -->
