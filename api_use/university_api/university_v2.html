@@ -1,5 +1,3 @@
-<!-- pagination -->
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,14 +20,14 @@
         <input type="text" id="searchInput" placeholder="Search Title or Domain" class="form-control mb-4">
         <div id="paginationContainer"></div>
         <table id="UniversityTable" class="table table-striped">
-            <thead>
+            <thead style="background-color: rgb(235, 184, 109);">
                 <tr>
-                    <th>Country</th>
-                    <th>Alpha Code</th>
-                    <th>University</th>
-                    <th>State</th>
-                    <th>Domain</th>
-                    <th>Website</th>
+                    <th onclick="sortTable('country')">Country</th>
+                    <th onclick="sortTable('alpha_code')">Alpha Code</th>
+                    <th onclick="sortTable('name')">University</th>
+                    <th onclick="sortTable('state_province')">State</th>
+                    <th onclick="sortTable('domains')">Domain</th>
+                    <th onclick="sortTable('web_pages')">Website</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -41,6 +39,14 @@
         let currentPage = 1;
         const resultsPerPage = 1000;
         let filteredData = [];
+        let sortDirection = {
+            country: 'asc',
+            alpha_code: 'asc',
+            name: 'asc',
+            state_province: 'asc',
+            domains: 'asc',
+            web_pages: 'asc'
+        };
 
         const searchInput = document.getElementById('searchInput');
         searchInput.addEventListener('input', handleSearch);
@@ -73,8 +79,8 @@
                 const ac = university.alpha_two_code;
                 const name = university.name;
                 const state = university.state_province || 'N/A';
-                const domain = university.domains[0];
-                const website = university.web_pages[0] || 'N/A';
+                const domain = Array.isArray(university.domains) ? university.domains[0] : 'N/A';
+                const website = Array.isArray(university.web_pages) ? university.web_pages[0] : 'N/A';
 
                 const row = tbody.insertRow();
                 row.insertCell().innerText = country;
@@ -114,7 +120,7 @@
             const searchTerm = searchInput.value.toLowerCase();
             filteredData = universitiesData.filter(university => {
                 const nameMatch = university.name.toLowerCase().includes(searchTerm);
-                const domainMatch = university.domains[0].toLowerCase().includes(searchTerm);
+                const domainMatch = Array.isArray(university.domains) && university.domains[0].toLowerCase().includes(searchTerm);
                 return nameMatch || domainMatch;
             });
 
@@ -123,8 +129,34 @@
             renderPagination();
         }
 
+        function sortTable(column) {
+            filteredData.sort((a, b) => {
+                const valueA = Array.isArray(a[column]) ? a[column][0] : a[column];
+                const valueB = Array.isArray(b[column]) ? b[column][0] : b[column];
+
+                if (sortDirection[column] === 'asc') {
+                    return valueA.localeCompare(valueB);
+                } else {
+                    return valueB.localeCompare(valueA);
+                }
+            });
+
+            sortDirection[column] = sortDirection[column] === 'asc' ? 'desc' : 'asc';
+
+            renderTable();
+        }
+
         fetchData();
     </script>
 </body>
 
 </html>
+
+
+<!-- Create a Web Page and show API data in a table with below features:
+
+Use of JavaScript fetch()
+
+Use bootstrap table
+
+Implement sort and filtering features in table. -->
